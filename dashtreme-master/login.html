@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>登入頁</title>
+    <!-- 加載器 -->
+    <link href="assets/css/pace.min.css" rel="stylesheet" />
+    <script src="assets/js/pace.min.js"></script>
+    <!-- 網站圖標 -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
+    <!-- Bootstrap 核心 CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- 動畫 CSS -->
+    <link href="assets/css/animate.css" rel="stylesheet" type="text/css" />
+    <!-- 圖標 CSS -->
+    <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
+    <!-- 自定義樣式 -->
+    <link href="assets/css/app-style.css" rel="stylesheet" />
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+
+  <body class="bg-theme bg-theme1">
+    <!-- 開始加載器 -->
+    <div id="pageloader-overlay" class="visible incoming">
+      <div class="loader-wrapper-outer">
+        <div class="loader-wrapper-inner">
+          <div class="loader"></div>
+        </div>
+      </div>
+    </div>
+    <!-- 結束加載器 -->
+
+    <!-- 開始包裝器 -->
+    <div id="wrapper">
+      <div class="card card-authentication1 mx-auto my-5">
+        <div class="card-body">
+          <div class="card-content p-2">
+            <div class="text-center">
+              <img src="assets/images/logo-icon.png" alt="標誌圖標" />
+            </div>
+            <div class="card-title text-uppercase text-center py-3">登入</div>
+
+            <!-- 登入表單 -->
+            <form>
+              <div class="form-group">
+                <label for="exampleInputUsername" class="sr-only">帳號</label>
+                <div class="position-relative has-icon-right">
+                  <input
+                    type="text"
+                    id="exampleInputUsername"
+                    name="username"
+                    class="form-control input-shadow"
+                    placeholder="輸入帳號"
+                  />
+                  <div class="form-control-position">
+                    <i class="icon-user"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword" class="sr-only">密碼</label>
+                <div class="position-relative has-icon-right">
+                  <input
+                    type="password"
+                    id="exampleInputPassword"
+                    name="password"
+                    class="form-control input-shadow"
+                    placeholder="輸入密碼"
+                  />
+                  <div class="form-control-position">
+                    <i class="icon-lock"></i>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onclick="login()"
+                class="btn btn-light btn-block"
+              >
+                登入
+              </button>
+            </form>
+            <!-- 登入表單結束 -->
+          </div>
+        </div>
+        <div class="card-footer text-center py-3">
+          <p class="text-warning mb-0">
+            還沒有帳戶？ <a href="register.html">在這裡註冊</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- 返回頂部按鈕 -->
+      <a href="javaScript:void();" class="back-to-top"
+        ><i class="fa fa-angle-double-up"></i>
+      </a>
+
+      <!-- 顏色切換器 -->
+      <div class="right-sidebar">
+        <div class="switcher-icon">
+          <i class="zmdi zmdi-settings zmdi-hc-spin"></i>
+        </div>
+        <div class="right-sidebar-content">
+          <p class="mb-0">高斯紋理</p>
+          <hr />
+          <ul class="switcher">
+            <li id="theme1"></li>
+            <li id="theme2"></li>
+            <li id="theme3"></li>
+            <li id="theme4"></li>
+            <li id="theme5"></li>
+            <li id="theme6"></li>
+          </ul>
+          <p class="mb-0">漸變背景</p>
+          <hr />
+          <!-- 更多主題按鈕 -->
+        </div>
+      </div>
+      <!-- 顏色切換器結束 -->
+    </div>
+    <!-- 結束包裝器 -->
+
+    <!-- 彈出視窗的 JavaScript 代碼 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      function login() {
+        var exampleInputUsername = document.getElementById("exampleInputUsername").value;
+        var exampleInputPassword = document.getElementById("exampleInputPassword").value;
+    
+        if (exampleInputUsername == "" || exampleInputPassword == "") {
+            Swal.fire({
+                title: "錯誤！",
+                text: "請輸入帳號或密碼！",
+                icon: "error",
+                confirmButtonText: "好的",
+            });
+            return;
+        }
+    
+        $.ajax({
+            url: "登入.php",
+            method: "POST",
+            data: {
+                username: exampleInputUsername,
+                password: exampleInputPassword,
+            },
+            success: function (ret) {
+                console.log("Response: ", ret);
+                if (ret === "帳號密碼錯誤") {
+                    Swal.fire({
+                        title: "錯誤！",
+                        text: "帳號或密碼錯誤，請重新輸入！",
+                        icon: "error",
+                        confirmButtonText: "好的",
+                    });
+                } else if (ret === "管理者") {
+                    window.location.href = "admin_index.html";
+                } else if (ret === "老師") {
+                    window.location.href = "teacher_index.html";
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error: ", status, error);
+                Swal.fire({
+                    title: "錯誤！",
+                    text: "網絡或伺服器錯誤：" + error,
+                    icon: "error",
+                    confirmButtonText: "好的",
+                });
+            }
+        });
+    }
+    
+      
+      
+     
+
+      //  window.onload = function () {
+      //  const params = new URLSearchParams(window.location.search);
+      //  const error = params.get('error');
+      // if (error === 'invalid_credentials') {
+      //   Swal.fire({
+      //     title: '錯誤！',
+      //     text: '帳號或密碼錯誤，請重新輸入！',
+      //   icon: 'error',
+      //    confirmButtonText: '好的'
+      //  });
+      //  }
+      // };
+    </script>
+  </body>
+</html>

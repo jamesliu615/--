@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教室座位安排</title>
+    <style>
+        .pillar-or-empty {
+            background-color: grey;
+            color: white;
+        }
+        .seat {
+            cursor: pointer;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        行數：<input type="number" id="rows" min="1" value="5">
+        列數：<input type="number" id="columns" min="1" value="5">
+        <button onclick="generateTable()">生成座位表</button>
+        <button id="togglePillarMode">設置柱子/空位</button>
+    </div>
+    <table id="table"></table>
+
+    <script>
+        let isPillarMode = false;
+
+        function generateTable() {
+            const table = document.getElementById('table');
+            table.innerHTML = '';
+            const rows = parseInt(document.getElementById('rows').value, 10);
+            const columns = parseInt(document.getElementById('columns').value, 10);
+
+            for (let i = 0; i < rows; i++) {
+                const row = table.insertRow(i);
+                for (let j = 0; j < columns; j++) {
+                    const cell = row.insertCell(j);
+                    cell.className = 'seat'; // 添加 seat 類別
+                    cell.onclick = function() {
+                        togglePillarOrEmpty(this);
+                    };
+                    // 在這裡添加其他座位相關的邏輯
+                }
+            }
+        }
+
+        function togglePillarOrEmpty(cell) {
+            if (isPillarMode) {
+                if (cell.classList.contains('pillar-or-empty')) {
+                    cell.classList.remove('pillar-or-empty');
+                    cell.innerHTML = '';
+                } else {
+                    cell.classList.add('pillar-or-empty');
+                    cell.innerHTML = '柱子/空位';
+                }
+            }
+        }
+
+        document.getElementById('togglePillarMode').onclick = function() {
+            isPillarMode = !isPillarMode;
+            this.textContent = isPillarMode ? '結束設置柱子/空位' : '設置柱子/空位';
+        };
+    </script>
+</body>
+</html>
